@@ -1,25 +1,30 @@
 # Stage 1: extract installer
-FROM busybox as prepare
+FROM busybox AS prepare
 
-ARG DEB_SH_NAME
+ARG DEB_SH_ZIP_NAME
 
-COPY assets/${DEB_SH_NAME} /tmp/stm32cubeide-installer.sh.zip 
+COPY assets/${DEB_SH_ZIP_NAME} /tmp/stm32cubeide-installer.sh.zip 
 
 RUN unzip -p /tmp/stm32cubeide-installer.sh.zip > /tmp/stm32cubeide-installer.sh && rm /tmp/stm32cubeide-installer.sh.zip
 
 # Stage 2: install STM32CubeIDE
-FROM ubuntu:22.04 as install
+FROM ubuntu:24.04 AS install
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install required dependencies
+# ARG for mirror selection
+ARG MIRROR
+
+# Check if MIRROR is set to 1 and run sed command accordingly
+RUN if [ "$MIRROR" = "1" ]; then \
+        sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.aliyun.com/ubuntu/|g; s|http://security.ubuntu.com/ubuntu/|http://mirrors.aliyun.com/ubuntu/|g' /etc/apt/sources.list.d/ubuntu.sources; \
+    fi
+
+# Install required dependencies to pass installer check
 RUN apt-get update \
     && apt-get -y -f install --no-install-recommends \
         libusb-1.0.0 \
         udev \
-        libncurses5 \
-        libpython2.7 \
-        libwebkit2gtk-4.0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install STM32 Cube IDE
@@ -36,7 +41,7 @@ COPY --from=prepare --chmod=755 /tmp/stm32cubeide-installer.sh /tmp
 RUN /tmp/stm32cubeide-installer.sh --quiet
 
 # Stage 3: copy runtime
-FROM ubuntu:22.04 as runtime
+FROM ubuntu:24.04 AS runtime
 
 LABEL org.opencontainers.image.authors="Xiaoyu Guo <biggates2010@gmail.com>"
 

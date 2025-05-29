@@ -11,7 +11,7 @@ This project provides a method for encapsulating STM32CubeIDE within a Docker co
 1. Run docker with your workspace mounted to `/workspace`.
 
   ```bash
-  $ docker run --rm -it -v {pwd}:/workspace biggates/stm32cubeide:1.15.1
+  $ docker run --rm -it -v {pwd}:/workspace biggates/stm32cubeide:1.18.1
   ```
 
 2. Run `headless-build.sh` inside docker container. Assume your project name is "Project"：
@@ -27,7 +27,7 @@ This project provides a method for encapsulating STM32CubeIDE within a Docker co
 
 ```bash
 root:/# headless-build.sh --help
-Usage: /opt/st/stm32cubeide_1.15.1/stm32cubeide -data <workspace> -application org.eclipse.cdt.managedbuilder.core.headlessbuild [ OPTIONS ]
+Usage: /opt/st/stm32cubeide_1.18.1/stm32cubeide -data <workspace> -application org.eclipse.cdt.managedbuilder.core.headlessbuild [ OPTIONS ]
 
    -data       {/path/to/workspace}
    -remove     {[uri:/]/path/to/project}

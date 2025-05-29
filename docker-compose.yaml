@@ -4,6 +4,7 @@ services:
     build: 
       context: .
       args:
-        DEB_SH_NAME: en.st-stm32cubeide_1.15.1_21094_20240412_1041_amd64.deb_bundle.sh.zip
-        STM32CUBEIDE_VERSION: 1.15.1
-    image: biggates/stm32cubeide:1.15.1
+        DEB_SH_ZIP_NAME: en.st-stm32cubeide_1.18.1_24813_20250409_2138_amd64.deb_bundle.sh.zip
+        STM32CUBEIDE_VERSION: 1.18.1
+        MIRROR: 1
+    image: biggates/stm32cubeide:1.18.1
